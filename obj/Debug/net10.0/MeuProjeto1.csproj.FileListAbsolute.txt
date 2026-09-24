@@ -1,0 +1,14 @@
+C:\Users\ricar\MeuProjeto1\bin\Debug\net10.0\MeuProjeto1.exe
+C:\Users\ricar\MeuProjeto1\bin\Debug\net10.0\MeuProjeto1.deps.json
+C:\Users\ricar\MeuProjeto1\bin\Debug\net10.0\MeuProjeto1.runtimeconfig.json
+C:\Users\ricar\MeuProjeto1\bin\Debug\net10.0\MeuProjeto1.dll
+C:\Users\ricar\MeuProjeto1\bin\Debug\net10.0\MeuProjeto1.pdb
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.AssemblyInfoInputs.cache
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.AssemblyInfo.cs
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.csproj.CoreCompileInputs.cache
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.dll
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\refint\MeuProjeto1.dll
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.pdb
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.genruntimeconfig.cache
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\ref\MeuProjeto1.dll
