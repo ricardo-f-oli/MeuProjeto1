@@ -1,51 +1,102 @@
-﻿
-using System.ComponentModel;
-using MeuProjeto1;
-using Microsoft.Win32.SafeHandles;
-
-public class Program
+﻿namespace MeuProjeto1
 {
-	public static void Main()
-	{
-		Carro carro = new Carro("VM", "Carro"); // Carro: [id = 0, marca = null, ano = 0, cor = null, velocidade = 0, estaLigado = false]
-		Console.WriteLine($"Carro: [id = {carro.Id}, marca = {carro.Marca}, ano = {carro.Ano}, cor = {carro.Cor}, velocidade = {carro.Velocidade}, estaLigado = {carro.EstaLigado}]");
-		Moto moto = new Moto("Yamaha", "Moto");
-		Console.WriteLine($"Moto: [id = {moto.Id}, marca = {moto.Marca}, ano = {moto.Ano}, cor = {moto.Cor}, velocidade = {moto.Velocidade}, estaLigado = {moto.EstaLigado}]");
-		carro.Id = 12;
-		carro.Cor = "Vermelho";
-		carro.Velocidade = 50;	
-		carro.Ano = 2020;
-		carro.Buzinar();
-		carro.EstaLigado = true;
-		carro.Buzinar();
-		moto.Id = 12;
-		moto.Cor = "Vermelho";
-		moto.Velocidade = 50;	
-		moto.Ano = 2020;
-		moto.Buzinar();
-		moto.EstaLigado = true;
-		moto.Buzinar();
-		// carro.Acelerar(20);
-		// Console.WriteLine($"Carro: [velocidade = {carro.Velocidade}]");
-		// carro.Frear(70);
-		// Console.WriteLine($"Carro: [velocidade = {carro.Velocidade}]");
-		// carro.Buzinar();
+    // Exemplo didático procedural: dados simples e funções estáticas, sem classes de domínio.
+    class Program
+    {
+        enum Opcao
+        {
+            Sair = 0,
+            Somar = 1,
+            Subtrair = 2,
+            Multiplicar = 3,
+            Dividir = 4,
+            Potencia = 5
+        }
 
-	}
+        static void Main(string[] args)
+        {
+            Console.WriteLine("=== Calculadora didática em C# ===");
+            Console.WriteLine("Procedural: as operações são funções separadas e os dados são variáveis locais.");
+            Console.WriteLine("Isso permite estudar lógica e funções sem introduzir objetos, propriedades ou herança.\n");
 
-	// Funções independentes: qualquer código pode alterar a velocidade diretamente.
-	static int Acelerar(int velocidadeAtual, int valor)
-	{
-		return velocidadeAtual + valor;
-	}
+            bool continuar = true;
 
-	static int Frear(int velocidadeAtual, int valor)
-	{
-		return Math.Max(0, velocidadeAtual - valor);
-	}
+            while (continuar)
+            {
+                Console.WriteLine("\n1-Somar  2-Subtrair  3-Multiplicar  4-Dividir  5-Potência  0-Sair");
+                Console.Write("Escolha: ");
+                string entrada = Console.ReadLine() ?? "";
+                if (!int.TryParse(entrada, out int valorOpcao) || !Enum.IsDefined(typeof(Opcao), valorOpcao))
+                {
+                    Console.WriteLine("Opção inválida.");
+                    continue;
+                }
 
-	static byte Somar(byte a, byte b)
-	{
-		return (byte)(a + b);
-	}
+                Opcao opcao = (Opcao)valorOpcao;
+                if(opcao == Opcao.Sair)
+                {
+                    continuar = false;
+                    break;
+                }
+                
+                    
+            
+                    double a = LerNumero("Primeiro número: ");
+                    double b = LerNumero("Segundo número: ");
+                    double resultado = 0;
+                    bool valido = true;
+
+                    // switch-case seleciona a operação; operadores matemáticos executam o cálculo.
+                    switch (opcao)
+                    {
+                        case Opcao.Somar: resultado = Somar(a, b); break;
+                        case Opcao.Subtrair: resultado = Subtrair(a, b); break;
+                        case Opcao.Multiplicar: resultado = Multiplicar(a, b); break;
+                        case Opcao.Dividir:
+                            if (b == 0)
+                            {
+                                Console.WriteLine("Não é possível dividir por zero.");
+                                valido = false;
+                            }
+                            else resultado = Dividir(a, b);
+                            break;
+                        case Opcao.Potencia: resultado = Math.Pow(a, b); break;
+                        default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                    }
+
+                    if (valido)
+                    {
+                        Console.WriteLine($"Resultado: {resultado}");
+                    }
+                
+                    
+                }
+
+                // Operador ternário: expressão condicional compacta.
+                string status = continuar ? "Calculadora ativa" : "Encerrando";
+                Console.WriteLine(status);
+
+            Console.WriteLine("Até a próxima!");
+        }
+
+        static double LerNumero(string mensagem)
+        {
+            while (true) // while repete até que a entrada seja válida.
+            {
+                Console.Write(mensagem);
+                string texto = Console.ReadLine() ?? "";
+                if (double.TryParse(texto, out double numero))
+                    return numero;
+                Console.WriteLine("Valor inválido; tente novamente.");
+            }
+        }
+
+        static double Somar(double a, double b) => a + b;
+        static double Subtrair(double a, double b) => a - b;
+        static double Multiplicar(double a, double b) => a * b;
+        static double Dividir(double a, double b) => a / b;
+    }
 }
+

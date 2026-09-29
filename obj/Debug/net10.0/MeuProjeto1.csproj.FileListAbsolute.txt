@@ -12,3 +12,4 @@ C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\refint\MeuProjeto1.dll
 C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.pdb
 C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.genruntimeconfig.cache
 C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\ref\MeuProjeto1.dll
+C:\Users\ricar\MeuProjeto1\obj\Debug\net10.0\MeuProjeto1.sourcelink.json
