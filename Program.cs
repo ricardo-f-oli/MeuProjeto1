@@ -61,6 +61,7 @@
                             else resultado = Dividir(a, b);
                             break;
                         case Opcao.Potencia: resultado = Math.Pow(a, b); break;
+                        case Opcao.RaizQuadrada: resultado = Math.Sqrt(a); break;
                         default:
                         Console.WriteLine("Opção inválida.");
                         break;
