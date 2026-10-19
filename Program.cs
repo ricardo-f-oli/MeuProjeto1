@@ -1,103 +1,146 @@
-﻿namespace MeuProjeto1
+using System;
+using System.Collections.Generic;
+
+Conta ana = new ContaCorrente("Ana", 1000);
+Conta bia = new ContaPoupanca("Bia", 2000);
+Conta caio = new ContaCorrente("Caio");
+
+ana.Depositar(200);
+bia.Depositar(500, "salário");
+ana.Sacar(1500);
+caio.Sacar(400);
+try
 {
-    // Exemplo didático procedural: dados simples e funções estáticas, sem classes de domínio.
-    class Program
+    caio.Sacar(200); // passa do limite: agora lança exceção
+}
+catch (SaldoInsuficienteException ex)
+{
+    Console.WriteLine($"Erro (Caio): {ex.Message}");
+}
+
+List<Conta> contas = new List<Conta>
+    { ana, bia, caio };
+foreach (Conta c in contas)
+{ c.FimDoMes(); c.ExibirExtrato(); }
+
+Console.WriteLine($"Total de contas: {Conta.GetTotalContas()}");
+
+try
+{
+    ana.Sacar(1200);
+    Console.WriteLine("Saque 1 ok");
+    ana.Sacar(1200);
+    Console.WriteLine("Saque 2 ok");
+}
+catch (SaldoInsuficienteException ex)
+{
+    Console.WriteLine($"Erro: {ex.Message}");
+}
+finally
+{
+    ana.ExibirExtrato();
+}
+
+// ===== Exceção personalizada =====
+public class SaldoInsuficienteException
+    : Exception
+{
+    public SaldoInsuficienteException(
+        string mensagem) : base(mensagem)
+    { }
+}
+
+// ===== Interface =====
+public interface IExtrato
+{
+    void ExibirExtrato();
+}
+
+// ===== Classe abstrata base =====
+public abstract class Conta : IExtrato
+{
+    private static int totalContas = 0;
+    public readonly string Titular;
+    protected decimal saldo;
+
+    public Conta(string titular,
+                 decimal saldoInicial)
     {
-        enum Opcao
-        {
-            Sair = 0,
-            Somar = 1,
-            Subtrair = 2,
-            Multiplicar = 3,
-            Dividir = 4,
-            Potencia = 5
-        }
+        Titular = titular;
+        saldo = saldoInicial;
+        totalContas++;
+    }
 
-        static void Main(string[] args)
-        {
-            Console.WriteLine("=== Calculadora didática em C# ===");
-            Console.WriteLine("Procedural: as operações são funções separadas e os dados são variáveis locais.");
-            Console.WriteLine("Isso permite estudar lógica e funções sem introduzir objetos, propriedades ou herança.\n");
+    public Conta(string titular)
+        : this(titular, 0) { }
 
-            bool continuar = true;
+    public decimal GetSaldo()
+    { return saldo; }
 
-            while (continuar)
-            {
-                Console.WriteLine("\n1-Somar  2-Subtrair  3-Multiplicar  4-Dividir  5-Potência  0-Sair");
-                Console.Write("Escolha: ");
-                string entrada = Console.ReadLine() ?? "";
-                if (!int.TryParse(entrada, out int valorOpcao) || !Enum.IsDefined(typeof(Opcao), valorOpcao))
-                {
-                    Console.WriteLine("Opção inválida.");
-                    continue;
-                }
+    public static int GetTotalContas()
+    { return totalContas; }
 
-                Opcao opcao = (Opcao)valorOpcao;
-                if(opcao == Opcao.Sair)
-                {
-                    continuar = false;
-                    break;
-                }
-                
-                    
-            
-                    double a = LerNumero("Primeiro número: ");
-                    double b = LerNumero("Segundo número: ");
-                    double resultado = 0;
-                    bool valido = true;
+    public void Depositar(decimal valor)
+    {
+        if (valor <= 0)
+            throw new ArgumentException(
+                "Depósito deve ser positivo");
+        saldo += valor;
+    }
 
-                    // switch-case seleciona a operação; operadores matemáticos executam o cálculo.
-                    switch (opcao)
-                    {
-                        case Opcao.Somar: resultado = Somar(a, b); break;
-                        case Opcao.Subtrair: resultado = Subtrair(a, b); break;
-                        case Opcao.Multiplicar: resultado = Multiplicar(a, b); break;
-                        case Opcao.Dividir:
-                            if (b == 0)
-                            {
-                                Console.WriteLine("Não é possível dividir por zero.");
-                                valido = false;
-                            }
-                            else resultado = Dividir(a, b);
-                            break;
-                        case Opcao.Potencia: resultado = Math.Pow(a, b); break;
-                        case Opcao.RaizQuadrada: resultado = Math.Sqrt(a); break;
-                        default:
-                        Console.WriteLine("Opção inválida.");
-                        break;
-                    }
+    public void Depositar(decimal valor,
+                          string d)
+    {
+        Depositar(valor);
+        Console.WriteLine($"Depósito: {d}");
+    }
 
-                    if (valido)
-                    {
-                        Console.WriteLine($"Resultado: {resultado}");
-                    }
-                
-                    
-                }
+    public virtual void Sacar(decimal valor)
+    {
+        if (valor > saldo)
+            throw new SaldoInsuficienteException(
+                "Saldo insuficiente");
+        saldo -= valor;
+    }
 
-                // Operador ternário: expressão condicional compacta.
-                string status = continuar ? "Calculadora ativa" : "Encerrando";
-                Console.WriteLine(status);
+    public abstract void FimDoMes();
 
-            Console.WriteLine("Até a próxima!");
-        }
-
-        static double LerNumero(string mensagem)
-        {
-            while (true) // while repete até que a entrada seja válida.
-            {
-                Console.Write(mensagem);
-                string texto = Console.ReadLine() ?? "";
-                if (double.TryParse(texto, out double numero))
-                    return numero;
-                Console.WriteLine("Valor inválido; tente novamente.");
-            }
-        }
-
-        static double Somar(double a, double b) => a + b;
-        static double Subtrair(double a, double b) => a - b;
-        static double Multiplicar(double a, double b) => a * b;
-        static double Dividir(double a, double b) => a / b;
+    public void ExibirExtrato()
+    {
+        Console.WriteLine(
+            $"{Titular}: R$ {saldo:F0}");
     }
 }
 
+// ===== Classes derivadas =====
+public class ContaCorrente : Conta
+{
+    private decimal limite = 500;
+
+    public ContaCorrente(string t, decimal s)
+        : base(t, s) { }
+
+    public ContaCorrente(string t) : base(t) { }
+
+    public override void Sacar(decimal valor)
+    {
+        if (valor > saldo + limite)
+            throw new SaldoInsuficienteException(
+                "Limite excedido");
+        saldo -= valor;
+    }
+
+    public override void FimDoMes()
+    { saldo -= 10; }
+}
+
+public class ContaPoupanca : Conta
+{
+    public ContaPoupanca(string t, decimal s)
+        : base(t, s) { }
+
+    public override void FimDoMes()
+    {
+        saldo += saldo * 0.01m;
+    }
+}
